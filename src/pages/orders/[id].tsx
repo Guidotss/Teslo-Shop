@@ -1,15 +1,30 @@
 import { NextPage } from "next";
 import NextLink from "next/link";
-import { Box, Button, Card, CardContent, Divider, Grid, Link, Typography } from "@mui/material";
-import { CartList, OrderSummary } from "@/components/cart";
 import { ShopLayout } from "@/components/layouts";
+import { Box, Button, Card, CardContent, Chip, Divider, Grid, Link, Typography } from "@mui/material";
+import { CartList, OrderSummary } from "@/components/cart";
+import { CreditCardOffOutlined, CreditScoreOutlined } from "@mui/icons-material";
 
+const OrderPage:NextPage = () => {
 
-const SummaryPage:NextPage = () => {
   return (
-    <ShopLayout title='Resumen de orden' pageDescription='Resumen de la orden'>
-            <Typography variant='h1' component='h1'>Resumen de la orden</Typography>
+    <ShopLayout title='Resumen de la orden 12213231' pageDescription='Resumen de la orden'>
+            <Typography variant='h1' component='h1'>Orden: ABC213</Typography>
 
+        {/*     <Chip 
+                sx={{my:2}}
+                label='Pendiente de pago'
+                variant='outlined'
+                color='error'
+                icon={<CreditCardOffOutlined/>}
+            /> */}
+            <Chip 
+                sx={{my:2}}
+                label='La orden ya fue pagada'
+                variant='outlined'
+                color='success'
+                icon={<CreditScoreOutlined/>}
+            />
             <Grid container>
                 <Grid item xs={ 12 } sm={7}>
                     <CartList/>
@@ -38,7 +53,7 @@ const SummaryPage:NextPage = () => {
                             <Divider sx={{my:1}}/> 
 
                                 <Box display='flex' justifyContent='end'>
-                                <NextLink href='/cart' passHref legacyBehavior>
+                                <NextLink href='/cart'>
                                     <Link sx={{color:'black'}}>
                                         Editar
                                     </Link>
@@ -48,9 +63,16 @@ const SummaryPage:NextPage = () => {
                             <OrderSummary/>
 
                             <Box sx={{mt:3}}>
-                                <Button color='secondary' className='circular-btn' fullWidth>
-                                    Confirmar Orden
-                                </Button>
+                                {/* TODO */}
+                               <h1>Pagar</h1> 
+
+                               <Chip 
+                                    sx={{my:2}}
+                                    label='La orden ya fue pagada'
+                                    variant='outlined'
+                                    color='success'
+                                    icon={<CreditScoreOutlined/>}
+                                />
                             </Box>
                         </CardContent>
                     </Card>
@@ -59,4 +81,4 @@ const SummaryPage:NextPage = () => {
         </ShopLayout>
   )
 }
-export default SummaryPage;
+export default OrderPage;
