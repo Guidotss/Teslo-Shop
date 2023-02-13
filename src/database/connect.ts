@@ -11,3 +11,4 @@ export const connect = async () => {
         await mongoose.connection.close();
     }
 }
+connect();

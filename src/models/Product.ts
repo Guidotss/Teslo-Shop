@@ -4,7 +4,7 @@ import mongoose, { Schema, Model,model } from "mongoose";
 
 const productSchema = new Schema({
 
-    descripton: { type: String, required: true },
+    description: { type: String, required: true },
     image: [{ type:String }],
     inStock:{ type:Number, required:true, default:0 },
     price: { type: Number, required: true ,default:0} ,
@@ -21,14 +21,14 @@ const productSchema = new Schema({
     type: {
         type:String,
         enum: {
-            values: [ 'shirts', 'pants', 'hoddies', 'hats' ],
+            values: [ 'shirts', 'pants', 'hoodies', 'hats' ],
             massage:'{VALUE} no es un tipo valido'
         }
     },
     gender:{
         type:String,
         enum: {
-            values:[ 'mens', 'women','kid', 'unisex' ],
+            values:[ 'men', 'women','kid', 'unisex' ],
             message:'{VALUE} no es un genero valido'
         }
     }
