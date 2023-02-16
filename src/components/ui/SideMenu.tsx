@@ -1,10 +1,16 @@
+import { useContext } from 'react';
 import { AccountCircleOutlined, AdminPanelSettings, CategoryOutlined, ConfirmationNumberOutlined, EscalatorWarningOutlined, FemaleOutlined, LoginOutlined, MaleOutlined, SearchOutlined, VpnKeyOutlined } from "@mui/icons-material"
 import { Box, Divider, Drawer, IconButton, Input, InputAdornment, List, ListItem, ListItemIcon, ListItemText, ListSubheader } from "@mui/material"
+import { UiContext } from '../../context/ui/UiContext';
 
 export const SideMenu = () => {
+
+    const {isSidebarOpen,closeSideMenu} = useContext(UiContext);
+
   return (
     <Drawer
-    open={ false }
+    open={ isSidebarOpen }
+    onClose={ closeSideMenu }
     anchor='right'
     sx={{ backdropFilter: 'blur(4px)', transition: 'all 0.5s ease-out' }}
     >

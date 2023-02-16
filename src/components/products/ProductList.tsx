@@ -7,7 +7,9 @@ interface Props {
     products: IProduct[]
 }
 
-export const ProductList:FC<Props> = ({products}) => {
+export const ProductList:FC<Props> = ({ products }) => {
+
+
   return (
     <Grid container spacing={ 4 }>
         {

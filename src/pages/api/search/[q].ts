@@ -28,14 +28,17 @@ const searchProducts = async(req: NextApiRequest, res: NextApiResponse<Data>) =>
         return res.status(400).json({message: 'Search query is required'});
     }
 
+    q.toString().toLowerCase();
+
     try{
         
        const products = await Product.find({
             $text: {
-                $search: q as string 
+                $search: q as string
             }
        })
-       .select('')
+       .select('title image price inStock slug -_id')
+       .lean();
 
        if(products.length === 0){
            return res.status(404).json({message: 'No products found'});

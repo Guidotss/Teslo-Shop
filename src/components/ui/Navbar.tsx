@@ -1,11 +1,22 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import NextLink from "next/link"; 
+import { useRouter } from "next/router";
+
 import { AppBar,Toolbar,Link, Typography, Box, Button, IconButton,Badge  } from "@mui/material";
 import { SearchOffOutlined,ShoppingCartOutlined } from "@mui/icons-material";
+import { UiContext } from "@/context";
 
 
 
 export const Navbar:FC = () => {
+
+
+  const { openSideMenu } = useContext(UiContext);
+  const { pathname } = useRouter();
+  const activePath = pathname.split('/')[2];
+
+
+
   return (
     <AppBar>
         <Toolbar>
@@ -21,17 +32,17 @@ export const Navbar:FC = () => {
           <Box sx={{display:{ xs:'none', sm:'block'}}} >
             <NextLink href="/category/men" passHref legacyBehavior>
                 <Link>
-                  <Button>Hombres</Button>
+                  <Button color={`${activePath == 'men' ? 'secondary' : 'info'}`} >Hombres</Button>
                 </Link>
             </NextLink>
             <NextLink href="/category/women" passHref legacyBehavior>
                 <Link>
-                  <Button>Mujeres</Button>
+                  <Button color={`${activePath == 'women' ? 'secondary' : 'info'}`}>Mujeres</Button>
                 </Link>
             </NextLink>
             <NextLink href="/category/kid" passHref legacyBehavior>
                 <Link>
-                  <Button>Niños</Button>
+                  <Button color={`${activePath == 'kid' ? 'secondary' : 'info'}`}>Niños</Button>
                 </Link>
             </NextLink>
           </Box>
@@ -52,7 +63,7 @@ export const Navbar:FC = () => {
             </Link>
           </NextLink>
 
-          <Button>Menu</Button>
+          <Button onClick={openSideMenu}>Menu</Button>
 
         </Toolbar>
     </AppBar>

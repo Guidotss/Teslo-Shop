@@ -7,7 +7,7 @@ import '@/database/connect';
 
 type Data = 
     |{message: string;}
-    |{message: string, products: IProduct[]}
+    |{ products: IProduct[]}
 
 export default function handler (req: NextApiRequest, res: NextApiResponse<Data>) {
 
@@ -24,16 +24,17 @@ const getProducts = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
 
     const { gender='all' } = req.query;
     let condition = {};
+    console.log(gender)
 
     if(gender !== 'all' && SHOP_CONSTANTS.validateGenders.includes(`${ gender }`)){
-        condition = { gender };
+        condition={ gender }
     }
 
     try{
         const products = await Product.find(condition)
                                       .select('title price slug images inStock -_id')
                                       .lean()
-        return res.status(200).json({ message: 'Products fetched', products })
+        return res.status(200).json( { products } )
 
     }catch(err){
         console.log(err); 

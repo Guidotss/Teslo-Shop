@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Product } from "@/models";
-import { initialData } from '@/database/products';
+import { seedDataBase } from '@/database';
 import '@/database/connect';
 
 interface Data {
@@ -17,7 +17,7 @@ export default async function handler(_req:NextApiRequest, res:NextApiResponse){
     try{
 
         await Product.deleteMany({});
-        await Product.insertMany(initialData.products);
+        await Product.insertMany(seedDataBase.initialData.products);
 
         return res.status(200).json({
             message: 'Success'

@@ -5,7 +5,7 @@ import mongoose, { Schema, Model,model } from "mongoose";
 const productSchema = new Schema({
 
     description: { type: String, required: true },
-    image: [{ type:String }],
+    images: [{ type:String }],
     inStock:{ type:Number, required:true, default:0 },
     price: { type: Number, required: true ,default:0} ,
     sizes: [{
