@@ -33,3 +33,4 @@ const getProductBySlug = async(req: NextApiRequest, res: NextApiResponse<Data>) 
     }
     
 }
+
