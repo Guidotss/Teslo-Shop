@@ -1,32 +1,45 @@
-import { ShopLayout } from "@/components/layouts"
-import { ProductSlideShow } from "@/components/products";
-import { SizeSelector } from "@/components/products/SizeSelector";
-import { ItemCounter } from "@/components/ui";
-import { initialData } from "@/database/products"
-import { Box, Button, Chip, Grid, Typography } from "@mui/material";
 import { NextPage } from "next"
-
-const product = initialData.products[0];
+import { useRouter } from "next/router";
+import { Box, Button, Chip, Grid, Typography } from "@mui/material";
+import { ShopLayout } from "@/components/layouts"
+import { useProducts } from '@/hooks';
+import { ProductSlideShow,SizeSelector } from "@/components/products";
+import { ItemCounter } from "@/components/ui";
 
 const ProductPage:NextPage = () => {
+
+  const { query } = useRouter();
+  const { data, isLoading } = useProducts(`/products/${ query.slug }`);
+  
+  
+  if(isLoading){
+    return <h1>Cargando...</h1>
+  }
+  
+  if(!data){
+    return <h1>No hay datos</h1>
+  }
+
+
+
   return (
-    <ShopLayout title={product.title} pageDescription={product.description}>
+    <ShopLayout title={data.product.title} pageDescription={data.product.description}>
       <Grid container spacing={3}>
           <Grid item xs={12} sm={7}>
-            <ProductSlideShow images={product.images}/>
+            <ProductSlideShow images={data.product.images}/>
           </Grid>
           <Grid item xs={12} sm={5}>
             <Box display='flex' flexDirection='column'>
               <Typography variant='h1' component='h1'>
-                {product.title}
+                {data.product.title}
               </Typography>
               <Typography variant='subtitle1' component='h2'>
-                ${product.price}
+                ${data.product.price}
               </Typography>
               <Box sx={{my:2}}>
                 <Typography variant='subtitle2'>
                   <ItemCounter/>
-                  <SizeSelector sizes={product.sizes}/>
+                  <SizeSelector sizes={data.product.sizes}/>
                 </Typography>
               </Box>
               <Button color='secondary' className='circular-btn'>
@@ -39,7 +52,7 @@ const ProductPage:NextPage = () => {
                   Descripción
                 </Typography>
                 <Typography variant='body2'>
-                  {product.description}
+                  {data.product.description}
                 </Typography>
               </Box>
             </Box>

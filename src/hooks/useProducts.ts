@@ -1,6 +1,6 @@
 import { IProduct } from '@/interfaces';
 import useSWR, { SWRConfiguration } from 'swr';
-import { SwrProductsResponse } from '../interfaces/swrProductResponse';
+import { SwrProductsResponse } from '@/interfaces/swrProductResponse';
 
 
 export const useProducts = ( url:string, config:SWRConfiguration={} ) => {
