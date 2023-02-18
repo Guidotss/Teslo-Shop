@@ -1,12 +1,10 @@
-import { NextPage,GetServerSideProps } from "next"
-import { useRouter } from "next/router";
+import { NextPage,GetServerSideProps,GetStaticPaths,GetStaticProps } from "next"
 import { Box, Button, Chip, Grid, Typography } from "@mui/material";
 import { ShopLayout } from "@/components/layouts"
-import { dbProducts } from "@/database";
-import { useProducts } from '@/hooks';
-import { IProduct } from "@/interfaces";
+import { dbProducts } from "@/database"
 import { ProductSlideShow,SizeSelector } from "@/components/products";
 import { ItemCounter } from "@/components/ui";
+import { IProduct } from "@/interfaces";
 
 interface Props {
   product:IProduct;
@@ -80,26 +78,19 @@ const ProductPage:NextPage<Props> = ({ product }) => {
 } */
 
 
-
-// You should use getStaticPaths if you’re statically pre-rendering pages that use dynamic routes
-import { GetStaticPaths } from 'next'
-
 export const getStaticPaths: GetStaticPaths = async (ctx) => {
   
   const data = await dbProducts.getAllProductsSlugs();
 
   const slugs = data.flatMap(slug => {
     return Object.values(slug);
-  })
+  });
 
   return {
     paths: slugs.map( slug => ({ params: { slug } }) ),
     fallback: false
   }
 }
-
-
-import { GetStaticProps } from 'next'
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   
