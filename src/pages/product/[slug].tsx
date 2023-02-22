@@ -94,7 +94,7 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 
   return {
     paths: slugs.map( slug => ({ params: { slug } }) ),
-    fallback: false
+    fallback: 'blocking'
   }
 }
 
@@ -106,10 +106,20 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   const { slug } = ctx.params as {slug:string};
   const product = await dbProducts.getProductBySlug( slug );
 
+  if(!product){
+    return {
+      redirect:{
+        destination:'/404',
+        permanent:false
+      }
+    }
+  }
+
   return {
     props: {
       product
-    }
+    },
+    revalidate: 60 * 60 * 24
   }
 }
 
