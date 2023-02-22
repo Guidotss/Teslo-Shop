@@ -1,9 +1,15 @@
+import { FC, useContext } from 'react';
 import { Grid, Typography } from "@mui/material"
-import { FC } from "react"
+import { CartContext } from '@/context/cart';
+import { currency } from '@/utils';
 
 
 
 export const OrderSummary:FC= () => {
+
+    const { orderSummary } = useContext(CartContext);
+    const { numberOfItems, subTotal, tax, taxRate,total } = orderSummary;
+    
 
   return (
     <Grid container>
@@ -14,7 +20,7 @@ export const OrderSummary:FC= () => {
         </Grid>
         <Grid item xs={6} display='flex' justifyContent='end'>
             <Typography>
-                3 items
+                {numberOfItems} {numberOfItems === 1 ? 'Producto' : 'Productos'}
             </Typography>
         </Grid>
         <Grid item xs={6} display='flex'>
@@ -24,17 +30,17 @@ export const OrderSummary:FC= () => {
         </Grid>
         <Grid item xs={6} display='flex' justifyContent='end'>
             <Typography>
-                ${`155.36`}
+              {currency.format(subTotal)}
             </Typography>
         </Grid>
         <Grid item xs={6} display='flex'>
             <Typography>
-                Impuestos (15%)
+                Impuestos ({taxRate * 100}%)
             </Typography>
         </Grid>
         <Grid item xs={6} display='flex' justifyContent='end'>
             <Typography>
-                ${`23.31`}
+                {currency.format(tax)}
             </Typography>
         </Grid>
         <Grid item xs={6} sx={{mt:2}} display='flex'>
@@ -44,7 +50,7 @@ export const OrderSummary:FC= () => {
         </Grid>
         <Grid item xs={6} sx={{mt:2}} display='flex' justifyContent='end'>
             <Typography variant='subtitle1' component='strong'>
-                ${`178.67`}
+                {currency.format(total)}
             </Typography>
         </Grid>
         
