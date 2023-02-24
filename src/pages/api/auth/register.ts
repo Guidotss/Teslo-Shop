@@ -6,8 +6,8 @@ import { signDocument, isValidEmail } from '@/utils';
 
 
 type Data = 
-    |{ message: string }
-    |{ token:string, user:{ name:string, role:string, email:string } }
+    |{ok:boolean; message: string }
+    |{ok:boolean; token:string, user:{ name:string, role:string, email:string } }
 
 
 export default function handler (req: NextApiRequest, res: NextApiResponse<Data>) {
@@ -15,7 +15,7 @@ export default function handler (req: NextApiRequest, res: NextApiResponse<Data>
         case 'POST':
             return registerUser(req,res);
         default:
-            return res.status(405).json({message: 'Method not allowed'});
+            return res.status(405).json({ok:false,message: 'Method not allowed'});
     }
 }
 
@@ -28,17 +28,17 @@ const registerUser = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
         const user = await User.findOne({email});
             
         if(password.length < 6){
-            return res.status(400).json({message: 'La contraseña debe tener al menos 6 caracteres'});
+            return res.status(400).json({ok:false,message: 'La contraseña debe tener al menos 6 caracteres'});
         }
         if(name.length < 3){
-            return res.status(400).json({message: 'El nombre debe tener al menos 3 caracteres'});
+            return res.status(400).json({ok:false,message: 'El nombre debe tener al menos 3 caracteres'});
         }
         if(!isValidEmail(email)){
-            return res.status(400).json({message: 'El email no es válido'});
+            return res.status(400).json({ok:false,message: 'El email no es válido'});
         }
 
         if(user){
-            return res.status(400).json({message: 'El usuario ya existe'});
+            return res.status(400).json({ok:false,message: 'El usuario ya existe'});
         }
 
         const newUser = new User({
@@ -54,6 +54,7 @@ const registerUser = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
         const token = signDocument(_id, email);
 
         return res.status(200).json({
+            ok:true,
             token,
             user:{
                 name,
@@ -64,6 +65,6 @@ const registerUser = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
 
     }catch(err){
         console.log(err);
-        return res.status(500).json({message: 'Internal server error'});
+        return res.status(500).json({ok:false,message: 'Internal server error'});
     }
 }

@@ -10,13 +10,13 @@ import { CartContext } from '@/context/cart';
 const CartPage:NextPage = () => {
     
     const { cart } = useContext(CartContext);
-/*     const router = useRouter();
+    const router = useRouter();
 
-    if (cart.length === 0) {
-        router.push('/cart/empty');
+    if(cart.length === 0){
+        router.replace('/cart/empty');
         return null;
     }
- */
+
     return (
         <ShopLayout title='Carrito - 3' pageDescription='Carrito de compras de la tienda'>
             <Typography variant='h1' component='h1'>Carrito</Typography>
