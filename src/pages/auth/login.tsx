@@ -16,11 +16,13 @@ type FormData = {
 
 const LoginPage:NextPage = () => {
 
-    const router = useRouter();
     const [showErrors, setShowErrors] = useState(false)
     const { register, handleSubmit, watch, formState:{ errors } } = useForm<FormData>();
     const { login } = useContext(AuthContext);
-
+    
+    
+    const router = useRouter();
+    const destination = router.query.p?.toString() || '/';
 
     const onLoginUser = async({email, password}:FormData) => {
 
@@ -34,8 +36,9 @@ const LoginPage:NextPage = () => {
             return;
         }
 
-        router.replace('/');
+        router.replace(destination);
     }
+
 
   return (
     <AuthLayout title='Login'>
@@ -99,9 +102,9 @@ const LoginPage:NextPage = () => {
                         >
                             Iniciar Sesión
                         </Button>
-                    </Grid>
                     <Grid item xs={12} display='flex' justifyContent='end'>
-                        <NextLink href='/auth/register' passHref legacyBehavior>
+                    </Grid>
+                        <NextLink href={`/auth/register?p=${destination}`} passHref legacyBehavior>
                             <Link variant='body1' color='secondary' underline='always'>
                                 ¿No tienes una cuenta?
                             </Link>

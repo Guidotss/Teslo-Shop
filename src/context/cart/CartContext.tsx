@@ -6,6 +6,7 @@ import { ICartProduct,IOrderSummary } from '@/interfaces';
 
 
 interface CartContextProps {
+    isLoaded:boolean;
     cart: ICartProduct[];
     orderSummary:IOrderSummary;
 

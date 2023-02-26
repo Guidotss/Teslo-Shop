@@ -5,7 +5,7 @@ import '@/database/connect';
 
 
 type Data = 
-    |{ ok:boolean,message: string }
+    |{ ok:boolean, message: string }
     |{ ok:boolean,token:string, user:{ name:string, role:string, email:string } }
     
 
@@ -14,7 +14,7 @@ export default function handler (req: NextApiRequest, res: NextApiResponse<Data>
         case 'GET':
             return validateToken(req,res);
         default:
-            return res.status(405).json({ok:false,message: 'Method not allowed'});
+            return res.status(405).json({ ok:false,message: 'Method not allowed' });
     }
 }
 const validateToken = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
@@ -29,7 +29,7 @@ const validateToken = async(req: NextApiRequest, res: NextApiResponse<Data>) => 
         
 
         if(!user){
-            return res.status(401).json({ok:false, message: 'No existe un usuario con ese ID'});
+            return res.status(401).json({ ok:false,message: 'No existe un usuario con ese ID' });
         }
 
         const { email,role,name } = user;

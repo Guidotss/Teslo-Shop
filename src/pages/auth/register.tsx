@@ -19,6 +19,7 @@ type FormData = {
 const RegisterPage:NextPage = () => {
 
     const router = useRouter();
+    const destination = router.query.p?.toString() || '/';
 
     const [ showError, setShowError ] = useState(false);
     const [ errorMessage, setErrorMessage ] = useState('');
@@ -27,6 +28,7 @@ const RegisterPage:NextPage = () => {
     const { register:registerUser }  = useContext(AuthContext);
 
     const onRegister = async({name, email, password}:FormData) => {
+        
         setShowError(false);
 
         const { hasError, message } = await registerUser(name, email, password);
@@ -38,8 +40,8 @@ const RegisterPage:NextPage = () => {
                 setTimeout(() => setShowError(false), 3000);
                 return;
             }
-
-            router.replace('/');
+            
+            router.replace(destination);
             
         }catch(err){
             setShowError(true);
@@ -130,7 +132,7 @@ const RegisterPage:NextPage = () => {
                         </Button>
                     </Grid>
                     <Grid item xs={12} display='flex' justifyContent='end'>
-                        <NextLink href='/auth/login' passHref legacyBehavior>
+                        <NextLink href={`/auth/login?p=${destination}`} passHref legacyBehavior>
                             <Link variant='body1' color='secondary' underline='always'>
                                 ¿Ya tienes una cuenta?
                             </Link>

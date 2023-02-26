@@ -12,10 +12,12 @@ interface CartProviderProps {
 export interface CartState {
     cart:ICartProduct[];
     orderSummary:IOrderSummary;
+    isLoaded:boolean
 }
 
 
 const CART_INITIAL_STATE: CartState = {
+    isLoaded:false,
     cart:[],
     orderSummary:{
         numberOfItems:0,
