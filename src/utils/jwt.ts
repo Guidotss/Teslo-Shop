@@ -21,6 +21,7 @@ export const verifyToken = (token:string):Promise<string> => {
                     reject('No se pudo verificar el token');
                 }
                 const { _id } = payload as { _id:string };
+                resolve(_id);
             });
         }catch(err){
             reject('No se pudo verificar el token');

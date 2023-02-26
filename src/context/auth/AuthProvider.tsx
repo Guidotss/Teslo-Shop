@@ -1,4 +1,4 @@
-import { FC,useReducer } from 'react';
+import { FC, useReducer, useEffect } from 'react';
 import { authReducer } from './authReducer';
 import { AuthContext } from './AuthContext';
 import { IUser } from '@/interfaces';
@@ -24,6 +24,43 @@ const AUTH_INITIAL_STATE:IAuthState = {
 
 export const AuthProvider:FC<AuthProviderProps> = ({ children }) => {
     const [ state,dispathc ] = useReducer(authReducer,AUTH_INITIAL_STATE);
+
+
+    useEffect(() => {
+        checkToken();
+    },[]);
+
+
+    const checkToken = async() => {
+        try{
+
+            const token = Cookies.get('token');
+
+            if(!token){
+                return dispathc({
+                    type: '[AUTH] - Logout'
+                })
+            }
+
+            const { data } = await tesloApi.get<AxiosAuthResponse>('/auth/validate-token');
+            
+            if(data.ok){
+                dispathc({
+                    type: '[AUTH] - Login',
+                    payload:data.user
+                })
+                Cookies.set('token',data.token);
+            }
+
+        }catch(err){
+            console.log(err);
+            dispathc({
+                type: '[AUTH] - Logout'
+            });
+            Cookies.remove('token');
+        }
+
+    }
 
     const login = async(email:string, password:string):Promise<boolean> => {
         try{
