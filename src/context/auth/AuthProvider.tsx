@@ -1,12 +1,12 @@
-import { FC,useReducer } from 'react';
+import { FC, useReducer, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
+import axios from 'axios';
 import { authReducer } from './authReducer';
 import { AuthContext } from './AuthContext';
 import { IUser } from '@/interfaces';
 import { tesloApi } from '@/api';
 import { AxiosAuthResponse } from '../../interfaces/axiosAuthResponse';
-import Cookies from 'js-cookie';
-import { TrySharp } from '@mui/icons-material';
-import axios from 'axios';
 
 interface AuthProviderProps {
     children: React.ReactNode;
@@ -24,9 +24,49 @@ const AUTH_INITIAL_STATE:IAuthState = {
 
 export const AuthProvider:FC<AuthProviderProps> = ({ children }) => {
     const [ state,dispathc ] = useReducer(authReducer,AUTH_INITIAL_STATE);
+    const router = useRouter();
+
+
+
+    useEffect(() => {
+        revalidateToken();
+    },[]);
+
+
+    const revalidateToken = async() => {
+        
+        const token = Cookies.get('token');
+        if(!token){
+            dispathc({
+                type:'[AUTH] - Logout'
+            });
+            return;
+        }
+
+        try{
+
+            const { data } = await tesloApi.get<AxiosAuthResponse>('/auth/validate-token');
+            if(data.ok){
+                const { token, user } = data;
+                Cookies.set('token',token);
+                dispathc({
+                    type: '[AUTH] - Login',
+                    payload:user
+                });
+            }
+            
+        }catch(err){
+            console.log(err);
+            dispathc({
+                type:'[AUTH] - Logout'
+            }); 
+        }
+        
+    }
 
     const login = async(email:string, password:string):Promise<boolean> => {
         try{
+
             const { data } = await tesloApi.post<AxiosAuthResponse>('/auth/login',{ email,password });
             if(data.ok){
                 const { token,user } = data;
@@ -46,6 +86,7 @@ export const AuthProvider:FC<AuthProviderProps> = ({ children }) => {
     const register = async(name:string, email:string, password:string):Promise<{hasError:boolean; message?:string}> => {
 
         try{
+
             const { data } = await tesloApi.post<AxiosAuthResponse>('/auth/register',{ name,email,password });
             if(data.ok){
                 const { token,user } = data;
@@ -61,6 +102,7 @@ export const AuthProvider:FC<AuthProviderProps> = ({ children }) => {
             }
 
         }catch(err){
+            
             if(axios.isAxiosError(err)){
                 return {
                     hasError:true,
@@ -72,6 +114,15 @@ export const AuthProvider:FC<AuthProviderProps> = ({ children }) => {
                 message:'No se pudo registrar el usuario - intentelo mas tarde'
             }
         }
+
+
+
+    }
+    
+    const logout = () => {
+        Cookies.remove('token');
+        Cookies.remove('cart');
+        router.reload();
     }
 
     return (
@@ -81,7 +132,8 @@ export const AuthProvider:FC<AuthProviderProps> = ({ children }) => {
 
             //Methods
                 login,
-                register
+                register,
+                logout,
             }}
         >
             { children }
